@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Importer – SearchEngine </title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">🔎 SearchEngine </a>
+  <div class="navbar-links">
+    <a href="/">Recherche</a>
+    <a href="/upload">📤 Importer</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <h2 class="page-title">📤 Importer des documents</h2>
+
+  <!-- Flash messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+      <div class="flash-box flash-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endwith %}
+
+  <form method="POST" enctype="multipart/form-data">
+
+    <div class="upload-zone" id="dropzone">
+      <input type="file" name="file" id="fileInput" multiple
+             accept=".pdf,.docx,.doc,.txt,.md"/>
+      <div class="upload-icon">📂</div>
+      <div class="upload-text">Glissez vos fichiers ici</div>
+      <div class="upload-sub">ou cliquez pour parcourir</div>
+      <div class="types-list" style="margin-top:0.75rem;">
+        <span class="badge badge-pdf">PDF</span>
+        <span class="badge badge-docx">DOCX</span>
+        <span class="badge badge-txt">TXT</span>
+        <span class="badge badge-md">MD</span>
+      </div>
+    </div>
+
+    <!-- Preview des fichiers sélectionnés -->
+    <div id="filePreview" style="display:none; margin-bottom:0.75rem;
+         background:#fff; border:1px solid #e2e8f0; border-radius:10px; padding:1rem;">
+      <p style="font-size:0.8rem; font-weight:600; color:#64748b; margin-bottom:0.5rem;">
+        Fichiers sélectionnés :
+      </p>
+      <ul id="fileList" style="list-style:none; font-size:0.875rem; display:flex; flex-direction:column; gap:4px;"></ul>
+    </div>
+
+    <div style="display:flex; gap:8px;">
+      <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+        📤 Indexer les fichiers
+      </button>
+      <a href="/" class="btn btn-ghost">← Retour</a>
+    </div>
+
+  </form>
+</div>
+
+<script>
+  const input = document.getElementById('fileInput');
+  const preview = document.getElementById('filePreview');
+  const fileList = document.getElementById('fileList');
+  const submitBtn = document.getElementById('submitBtn');
+
+  input.addEventListener('change', () => {
+    fileList.innerHTML = '';
+    if (input.files.length === 0) {
+      preview.style.display = 'none';
+      submitBtn.disabled = true;
+      return;
+    }
+    preview.style.display = 'block';
+    submitBtn.disabled = false;
+    Array.from(input.files).forEach(f => {
+      const ext = f.name.split('.').pop().toLowerCase();
+      const icons = {pdf:'📄', docx:'📘', doc:'📘', txt:'📝', md:'📓'};
+      const li = document.createElement('li');
+      li.innerHTML = `${icons[ext] || '📄'} <strong>${f.name}</strong>
+        <span class="badge badge-${ext}" style="margin-left:6px;">${ext.toUpperCase()}</span>`;
+      fileList.appendChild(li);
+    });
+  });
+</script>
+
+</body>
+</html>

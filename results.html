@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Résultats – {{ q }}</title>
+  <link rel="stylesheet" href="/static/style.css"/>
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">🔎 SearchEngine </a>
+  <div class="navbar-links">
+    <a href="/">Recherche</a>
+    <a href="/upload">📤 Importer</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- Barre de recherche rapide en haut -->
+  <form action="/search" method="get" style="display:flex; gap:8px; margin-bottom:1.5rem;">
+    <input class="search-input" type="text" name="q" value="{{ q }}" style="flex:1;"/>
+    <input type="hidden" name="field" value="{{ field }}"/>
+    <input type="hidden" name="type" value="{{ doc_type }}"/>
+    <button type="submit" class="btn btn-primary">🔍</button>
+    <a href="/" class="btn btn-ghost">← Retour</a>
+  </form>
+
+  {% if error %}
+    <div class="empty-state">
+      <div class="icon">⚠️</div>
+      <h3>{{ error }}</h3>
+    </div>
+
+  {% elif results %}
+    <div class="results-meta">
+      <strong>{{ results | length }}</strong> résultat(s) pour
+      <strong>"{{ q }}"</strong>
+      {% if doc_type != 'all' %} &nbsp;·&nbsp; type : <strong>{{ doc_type | upper }}</strong>{% endif %}
+      {% if field != 'all' %} &nbsp;·&nbsp; champ : <strong>{{ field }}</strong>{% endif %}
+    </div>
+
+    {% for r in results %}
+    <div class="card">
+      <h3>{{ r.title | safe }}</h3>
+      <p>{{ r.content | safe }}</p>
+      <span class="badge badge-{{ r.type }}">{{ r.type | upper }}</span>
+    </div>
+    {% endfor %}
+
+  {% else %}
+    <div class="empty-state">
+      <div class="icon">🔎</div>
+      <h3>Aucun résultat pour "{{ q }}"</h3>
+      <p style="margin-top:0.5rem; font-size:0.875rem;">
+        Essayez d'autres mots-clés ou
+        <a href="/upload" style="color:#2563eb;">importez des documents</a>.
+      </p>
+    </div>
+  {% endif %}
+
+</div>
+</body>
+</html>

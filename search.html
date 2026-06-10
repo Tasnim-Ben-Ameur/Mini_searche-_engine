@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mini Search Engine </title>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <a href="/" class="navbar-brand">🔎 SearchEngine </a>
+  <div class="navbar-links">
+    <a href="/">Recherche</a>
+    <a href="/upload">📤 Importer</a>
+  </div>
+</nav>
+
+<div class="container">
+
+  <div class="hero">
+    <h1>🔍 Mini Moteur de Recherche</h1>
+    <p>Recherchez dans vos documents indexés — PDF, DOCX, TXT, Markdown</p>
+  </div>
+
+  <form class="search-form" action="/search" method="get">
+
+    <div class="search-row">
+      <input class="search-input" type="text" name="q" placeholder="Entrez vos mots-clés…" autofocus />
+      <button type="submit" class="btn btn-primary">Chercher</button>
+    </div>
+
+    <div class="search-filters">
+      <!-- Filtre par champ -->
+      <select name="field">
+        <option value="all">🔎 Tous les champs</option>
+        <option value="title">🏷️ Titre uniquement</option>
+        <option value="content">📄 Contenu uniquement</option>
+      </select>
+
+      <!-- Filtre par type -->
+      <select name="type">
+        <option value="all">📁 Tous les types</option>
+        <option value="pdf">PDF</option>
+        <option value="docx">DOCX</option>
+        <option value="txt">TXT</option>
+        <option value="md">Markdown</option>
+      </select>
+    </div>
+
+  </form>
+
+</div>
+</body>
+</html>
